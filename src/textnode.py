@@ -20,7 +20,7 @@ class TextNode():
         self.url = url
 
     def text_node_to_html_node(self):
-        # If it will fail on some point, change match a lot of ifs
+        # If it will fail on some point, change match to a lot of ifs
         match self.text_type:
             case "text":
                 return LeafNode(None, self.text)
