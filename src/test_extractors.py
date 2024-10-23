@@ -154,21 +154,20 @@ class TestExtractorsImages(unittest.TestCase):
         result = split_nodes_image(nodes)
         self.assertEqual(len(result), 2)
 
-
-def test_split_image(self):
-    node = TextNode(
-        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)",
-        TextType.TEXT,
-    )
-    new_nodes = split_nodes_image([node])
-    self.assertListEqual(
-        [
-            TextNode("This is text with an ", TextType.TEXT),
-            TextNode("image", TextType.IMAGE,
-                     "https://i.imgur.com/zjjcJKZ.png"),
-        ],
-        new_nodes,
-    )
+    def test_split_image(self):
+        node = TextNode(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)",
+            TextType.TEXT,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.TEXT),
+                TextNode("image", TextType.IMAGE,
+                         "https://i.imgur.com/zjjcJKZ.png"),
+            ],
+            new_nodes,
+        )
 
 
 class BootDevExmplSplitters(unittest.TestCase):
@@ -204,7 +203,6 @@ class BootDevExmplSplitters(unittest.TestCase):
             ],
             new_nodes,
         )
-
 
 
 class TestConvertingRawTextToMarkdown(unittest.TestCase):
@@ -264,6 +262,42 @@ class TestConvertingRawTextToMarkdown(unittest.TestCase):
             ],
             converted,
         )
+
+
+class TestBlockSeperator(unittest.TestCase):
+    def test_block_separator(self):
+        test_str = """# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item"""
+        correct = ['# This is a heading', 'This is a paragraph of text. It has some **bold** and *italic* words inside of it.',
+                   '* This is the first list item in a list block\n* This is a list item\n* This is another list item']
+        result = markdown_to_blocks(test_str)
+        self.assertListEqual(result, correct)
+
+    def test_block_separator_2(self):
+        test_str = """# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it."""
+        correct = ['# This is a heading', 'This is a paragraph of text. It has some **bold** and *italic* words inside of it.']
+        result = markdown_to_blocks(test_str)
+        self.assertListEqual(result, correct)
+
+    def test_block_separator_3(self):
+        test_str = """# This is a heading"""
+        correct = ['# This is a heading']
+        result = markdown_to_blocks(test_str)
+        self.assertListEqual(result, correct)
+
+    def test_block_separator_4(self):
+        test_str = """"""
+        correct = []
+        result = markdown_to_blocks(test_str)
+        self.assertListEqual(result, correct)
+        
 
 
 if __name__ == "__main__":
