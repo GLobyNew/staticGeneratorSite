@@ -100,19 +100,5 @@ def text_to_textnodes(text):
     ready_nodes = split_nodes_link(converting_node)
     return ready_nodes
 
+   
 
-def markdown_to_blocks(markdown):
-    list_of_str = markdown.splitlines()
-    rdy_list = []
-    combined_str = ""
-    for value in list_of_str:
-        if value != "":
-            combined_str += value + '\n'
-        else:
-            rdy_list.append(combined_str)
-            combined_str = ""
-    if combined_str != "":
-        rdy_list.append(combined_str)
-    rdy_list = list(filter(lambda x: x != "", rdy_list))
-    rdy_list = list(map(lambda x: x.strip(), rdy_list))
-    return rdy_list
