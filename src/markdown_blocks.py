@@ -1,10 +1,13 @@
-# block_type_paragraph = "paragraph"
-# block_type_heading = "heading"
-# block_type_code = "code"
-# block_type_quote = "quote"
-# block_type_olist = "ordered_list"
-# block_type_ulist = "unordered_list"
-# In case of reformat
+from enum import Enum
+from htmlnode import HTMLNode
+
+class BlockType(Enum):
+    PARAGRAPH = "paragraph"
+    HEADING = "heading"
+    CODE = "code"
+    QUOTE = "quote"
+    ORDERED_LIST = "ordered_list"
+    UNORDERED_LIST = "unordered_list"
 
 
 def markdown_to_blocks(markdown):
@@ -30,25 +33,25 @@ def block_to_block_type(markdown_block):
     splitted_str = markdown_block.split()
     heading_level = splitted_str[0].count("#")
     if heading_level > 0 and heading_level < 7:
-        return f"Heading, level {heading_level}"
+        return BlockType.HEADING
     if heading_level >= 7:
         raise Exception("Bad Markdown: Heading level has more than 7 levels")
 
     # Check if it's a code block
     if splitted_str[0] == "```" and splitted_str[-1] == "```":
-        return "It's a code block"
+        return BlockType.CODE
     # Handle code block if only one word
     if splitted_str[0][:3] == "```" and splitted_str[-1][-3:] == "```":
-        return "It's a code block"
+        return BlockType.CODE
     
     # Check if its quote block
     splitted_by_lines = markdown_block.splitlines()
     if all(x.startswith(">") for x in splitted_by_lines):
-        return "It's a quote block"
+        return BlockType.QUOTE
     
     # Check if its unordered list block
     if all(x.startswith("* ") or x.startswith("- ") for x in splitted_by_lines):
-        return "It's a unordered list block"
+        return BlockType.UNORDERED_LIST
     
     # Check if its ordered list block
     is_it_ordered = True
@@ -59,6 +62,15 @@ def block_to_block_type(markdown_block):
             break
         i += 1
     if is_it_ordered:
-        return "It's a ordered list block"
+        return BlockType.ORDERED_LIST
     
-    return "It's a normal paragraph"
+    return BlockType.PARAGRAPH
+
+
+def markdown_to_html_node(markdown):
+    splitted_markdown = markdown_to_blocks(markdown)
+    for block in splitted_markdown:
+        block_type = block_to_block_type(block)
+        match block_type:
+            case "paragraph":
+                new_node = HTMLNode()
