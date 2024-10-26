@@ -66,6 +66,9 @@ def block_to_block_type(markdown_block):
     
     return BlockType.PARAGRAPH
 
+def count_heading_level(heading_str):
+    return heading_str.count("#")
+
 
 def markdown_to_html_node(markdown):
     splitted_markdown = markdown_to_blocks(markdown)
@@ -73,4 +76,15 @@ def markdown_to_html_node(markdown):
         block_type = block_to_block_type(block)
         match block_type:
             case "paragraph":
-                new_node = HTMLNode()
+                new_node = HTMLNode("p", block)
+            case "heading":
+                heading_level = count_heading_level(block)
+                new_node = HTMLNode(f"h{heading_level}", block)
+            case "code":
+                new_node = HTMLNode("code", block)
+            case "quote":
+                new_node = HTMLNode("blockquote", block)
+            case "ordered_list":
+                new_node = HTMLNode("ol", block)
+            case "ordered_list":
+                new_node = HTMLNode("ul", block)
