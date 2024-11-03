@@ -85,7 +85,7 @@ def remove_heading_from_block(heading_block, heading_level):
 
 
 def remove_code_from_block(code_block):
-    return code_block[3:-3]
+    return code_block[3:-3].strip()
 
 
 def remove_quote_from_block(quote_block):
@@ -93,7 +93,7 @@ def remove_quote_from_block(quote_block):
     cleared_block = ""
     for line in splitted_block:
         cleared_block += line[1:] + "\n"
-    return cleared_block
+    return cleared_block.strip()
 
 def remove_ordered_list_and_generate_children(list_blocks):
     splitted_block = list_blocks.splitlines()
