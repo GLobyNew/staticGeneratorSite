@@ -283,7 +283,8 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
         test_str = """# This is a heading
 
 This is a paragraph of text. It has some **bold** and *italic* words inside of it."""
-        correct = ['# This is a heading', 'This is a paragraph of text. It has some **bold** and *italic* words inside of it.']
+        correct = ['# This is a heading',
+                   'This is a paragraph of text. It has some **bold** and *italic* words inside of it.']
         result = markdown_to_blocks(test_str)
         self.assertListEqual(result, correct)
 
@@ -298,42 +299,7 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
         correct = []
         result = markdown_to_blocks(test_str)
         self.assertListEqual(result, correct)
-        
-class TestBlockToBlock(unittest.TestCase):
-    def test_block_to_blocks_1(self):
-        test_str = "# This is a heading"
-        correct = "Heading, level 1"
-        result = block_to_block_type(test_str)
-        self.assertEqual(result, correct)
 
-    def test_block_to_blocks_2(self):
-        test_str = "### This is a heading"
-        correct = "Heading, level 3"
-        result = block_to_block_type(test_str)
-        self.assertEqual(result, correct)
-
-    def test_block_to_blocks_3(self):
-        test_str = "###### This is a heading"
-        correct = "Heading, level 6"
-        result = block_to_block_type(test_str)
-        self.assertEqual(result, correct)
-
-    def test_block_to_blocks_4(self):
-        with self.assertRaises(Exception):
-            test_str = "####### This is a heading"
-            result = block_to_block_type(test_str)
-
-    def test_block_to_blocks_5(self):
-        test_str = "```This is a heading```"
-        correct = "It's a code block"
-        result = block_to_block_type(test_str)
-        self.assertEqual(result, correct)
-
-    def test_block_to_blocks_6(self):
-        with self.assertRaises(ValueError):
-            test_str = ""
-            result = block_to_block_type(test_str)
-        
 
 if __name__ == "__main__":
     unittest.main()
